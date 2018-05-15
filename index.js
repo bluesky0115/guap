@@ -19,23 +19,24 @@ db.once('open', () => {
 const bodyParser = require('body-parser');
 
 
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-app.get('/', (req,res) => {
-	res.send(`
-		<form action="/" method="post">
-			<label>Email</label><br />
-			<input type="text" name="email"/><br/>
-			<label>Username</label><br />
-			<input type="text" name="username"/><br/>
-			<label>Password</label><br />
-			<input type="password" name="password"/><br/>
-			<label>Confirm Password</label><br />
-			<input type="password" name="passwordConf"/><br/>
-			<input type="submit" />
-		</form>	
-	`);
-})
+// app.get('/', (req,res) => {
+// 	res.send(`
+// 		<form action="/" method="post">
+// 			<label>Email</label><br />
+// 			<input type="text" name="email"/><br/>
+// 			<label>Username</label><br />
+// 			<input type="text" name="username"/><br/>
+// 			<label>Password</label><br />
+// 			<input type="password" name="password"/><br/>
+// 			<label>Confirm Password</label><br />
+// 			<input type="password" name="passwordConf"/><br/>
+// 			<input type="submit" />
+// 		</form>	
+// 	`);
+// })
 
 app.post('/', (req,res, err) => {
 	User.create({
@@ -47,4 +48,4 @@ app.post('/', (req,res, err) => {
 	return res.redirect('/')
 })
 
-app.listen(3000, console.log('Server running on port 3000'))
+app.listen(5000, console.log('Server running on port 5000'))
