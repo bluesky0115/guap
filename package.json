@@ -1,0 +1,19 @@
+{
+  "name": "guap",
+  "version": "1.0.0",
+  "description": "Guap P2P money lending",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kdors007/guap.git"
+  },
+  "author": "Kareem Dorset",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kdors007/guap/issues"
+  },
+  "homepage": "https://github.com/kdors007/guap#readme"
+}
