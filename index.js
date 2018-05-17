@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const bcrypt = require('bcrypt');
 
 const mongoose =require('mongoose');
 mongoose.connect('mongodb://localhost/gwap');
@@ -22,23 +23,25 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// app.get('/', (req,res) => {
-// 	res.send(`
-// 		<form action="/" method="post">
-// 			<label>Email</label><br />
-// 			<input type="text" name="email"/><br/>
-// 			<label>Username</label><br />
-// 			<input type="text" name="username"/><br/>
-// 			<label>Password</label><br />
-// 			<input type="password" name="password"/><br/>
-// 			<label>Confirm Password</label><br />
-// 			<input type="password" name="passwordConf"/><br/>
-// 			<input type="submit" />
-// 		</form>	
-// 	`);
-// })
+app.get('/users', (req,res) => {
+	User.find()
+		.then(response => {
+			res.send(response.map(user => {
+				return user
+			}))
+		})
+})
 
 app.post('/', (req,res, err) => {
+	// newUser = new User
+	// bcrypt.genSalt(10, function(err, salt) {
+	//     bcrypt.hash(req.body.password, salt, function(err, hash) {
+	//         // Store hash in your password DB.
+	// 	    newUser.password = hash
+	//     });
+	// });
+	// newUser.email = req.body.email
+	// console.log(newUser)
 	User.create({
 		email: req.body.email,
 		username: req.body.username,
