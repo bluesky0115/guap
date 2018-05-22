@@ -49,6 +49,27 @@ app.post('/', (req,res, err) => {
 		passwordConf: req.body.passwordConf
 	})
 	return res.redirect('/')
+});
+
+app.post('/userAuth', (req, res) => {
+	User.findOne(
+		{email: req.body.email},
+		(err, user) => {
+			if (err) throw err;
+			if (user) {
+				// bcrypt.compare(req.body.password, user.password, (err, result) => {
+				// 	if (err) throw err;
+				// 	if (result) {
+						res.send(user);
+					// } else {
+					// 	res.send('Invalid login info');
+					// }
+				// });
+			} else {
+				res.status(404).send("Invalid login info");
+			}
+		}
+	)
 })
 
 app.listen(5000, console.log('Server running on port 5000'))

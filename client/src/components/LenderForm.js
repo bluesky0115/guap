@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import store from '../store';
+import {activeUser} from '../actions/index'
 import bcrypt from 'bcryptjs';
 const salt = bcrypt.genSaltSync(10);
+
 
 class LenderForm extends Component {
 
@@ -20,30 +23,33 @@ class LenderForm extends Component {
 	}
 
 	handleChange(e){
-	    let change = {[e.target.name]: e.target.value}
-	    this.setState({
-	      [e.target.name]: e.target.value,
-	    })
+	    this.setState({[e.target.name]: e.target.value})
 	  }
 
 	handleSubmit(e) {
 		e.preventDefault();
+		const username = e.target.username.value;
 	    const password = bcrypt.hashSync(e.target.password.value, salt);
-	    const passwordConf = e.target.passwordConf.value
-	    const passwordConfhash = bcrypt.hashSync(e.target.passwordConf.value, salt);
-	    axios.post('/', {
-	        email: e.target.email.value,
-	        username: e.target.username.value,
-	        password: password,
-	        passwordConf: passwordConf,
-	      })
-	      .then((response) => {
-	        this.setState.passwordMatch = bcrypt.compareSync(passwordConf, password);
-	        this.setState.users = [...this.state.users, ]
-	      })
-	      .catch(error => {
-	        console.log(error)
-	      })
+	    const passwordConf = e.target.passwordConf.value;
+	    const passwordMatch = bcrypt.compareSync(passwordConf, password);
+	    if (passwordMatch === true) {
+		    axios.post('/', {
+		        email: e.target.email.value,
+		        username: e.target.username.value,
+		        password: password,
+		        // passwordConf: passwordConf,
+		      })
+		      .then((response) => {
+		        store.dispatch(activeUser(username))
+				localStorage.setItem('activeUser', JSON.stringify(store.getState()))
+				window.location = '/lender/account'
+		      })
+		      .catch(error => {
+		        console.log(error)
+		      })
+		} else {
+			console.log('Wrong password')
+		}
 	}
 
 	componentDidMount() {
@@ -57,23 +63,20 @@ class LenderForm extends Component {
 	  }
 
 	render() {
+		console.log(this)
 		return (
 			<div>
 				<form onSubmit={this.handleSubmit}>
 		          <label>Email</label><br />
-		          <input type="text" name="email" onChange={this.handleChange} value={this.state.email}/><br/>
+		          <input type="text" name="email" onChange={this.handleChange} autoComplete="email" value={this.state.email}/><br/>
 		          <label>Username</label><br />
-		          <input type="text" name="username" onChange={this.handleChange} value={this.state.username}/><br/>
+		          <input type="text" name="username" onChange={this.handleChange} autoComplete="username" value={this.state.username}/><br/>
 		          <label>Password</label><br />
-		          <input type="password" name="password" onChange={this.handleChange} value={this.state.password}/><br/>
+		          <input type="password" name="password" onChange={this.handleChange} autoComplete="new-password" value={this.state.password}/><br/>
 		          <label>Confirm Password</label><br />
-		          <input type="password" name="passwordConf" onChange={this.handleChange} value={this.state.passwordConf}/><br/>
+		          <input type="password" name="passwordConf" onChange={this.handleChange} autoComplete="new-password" value={this.state.passwordConf}/><br/>
 		          <input type="submit" />
 		        </form> 
-		        <a href="/marketplace">Market</a>
-	        <div>
-	          {this.state.users.map(x => <li>{x.email}</li>)}
-	        </div>
 			</div>
 		);
 	}

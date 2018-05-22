@@ -20,10 +20,14 @@ const userSchema = new Schema({
 	    type: String,
 	    required: true,
 	},
-	passwordConf: {
-	    type: String,
-	    required: true,
-	}
+	// passwordConf: {
+	//     type: String,
+	//     required: true,
+	// }
 });
+
+userSchema.pre('save', () => {
+	console.log("Saving new user")
+})
 
 let User = module.exports = mongoose.model('User', userSchema)
